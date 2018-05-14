@@ -26,7 +26,7 @@ mongo_config = {
     'mongo_auth_source': os.getenv('MONGO_AUTH_SOURCE', 'admin'),
     'mongo_auth_mechanism': os.getenv('MONGO_AUTH_MECHANISM', 'SCRAM-SHA-1'),
     #'mongo_auth_mechanism': os.getenv('MONGO_AUTH_MECHANISM', 'MONGODB-CR'),
-    'db_name': os.getenv('MONGO_DB_NAME', 'Quandl'),
+    'db_name': os.getenv('MONGO_DB_NAME', 'Quandl1'),
     'mongo_index_name': os.getenv('MONGO_INDEX_NAME', 'csrtc'),
     'meta_colln_name': os.getenv('METADATA_COLLN_NAME', 'metadata'),
     'quandl_codes_colln_name': os.getenv('QUANDL_CODES_COLLN_NAME', 'dataset'),

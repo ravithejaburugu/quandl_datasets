@@ -95,7 +95,6 @@ def main():
     meta_mongo_colln = mongo.initialize_mongo(meta_col_name)
 
     # Executes code uninterrupted.
-    #while True:
     try:
         getCodesInCSVsForAllDatasets(quandl_apikey)
     

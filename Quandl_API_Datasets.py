@@ -58,21 +58,7 @@ def getCodesInCSVsForAllDatasets(quandl_apikey):
         except:
             continue
     print database_codes
-    #return
 
-    """database_codes = {#'CFTCOLDTEST': 'CFTC - deprecated'
-                      'BITSTAMP': 'Bitstamp',
-                      'BLSE': 'BLS Employment & Unemployment',
-                      'BLSI': 'BLS Inflation & Prices',
-                      'BLSP': 'BLS Productivity',
-                      'ECONOMIST': 'The Economist - Big Mac Index',
-                      'HKEX': 'Hong Kong Exchange',
-                      'MCX': 'Multi Commodity Exchange India',
-                      'SHFE': 'Shanghai Futures Exchange',
-                      'TFX': 'Tokyo Financial Exchange',
-                      'UKRSE': 'Ukrainian Exchange',
-                      'ZAGREBSE': 'Zagreb Stock Exchange'
-                     }"""
     for code in database_codes.keys():
     
         zip_filename = code + '-datasets-codes.zip'
@@ -141,8 +127,6 @@ def saveCodesInMongo(qcode_name):
                                     }
                         dataset_qcodes.append(code_doc)
                         
-                        break
-
             qcode_cursor = qcodes_colln.find_one({'dataset': dataset})
 
             if qcode_cursor:
