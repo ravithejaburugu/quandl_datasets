@@ -96,24 +96,8 @@ def main():
 
     # Executes code uninterrupted.
     try:
-        getCodesInCSVsForAllDatasets(quandl_apikey)
+        #getCodesInCSVsForAllDatasets(quandl_apikey)
     
-        # Fetching dataset codes from Quandl
-        """qcodes_cursor = qcodes_colln.find()
-        for qcur in qcodes_cursor:
-            # Redownload the codes for every 30 days
-            curr_date = datetime.now().strftime("%Y-%m-%d")
-            codes_dt = datetime(*map(int, (qcur['created_time'])\
-                                          .split("-")))
-            curr_dt = datetime(*map(int, curr_date.split("-")))
-
-            if (curr_dt - codes_dt).days > 30:
-                getCodesInCSVsForAllDatasets(quandl_apikey)
-            break
-        else:
-            # Downloading the Quandl codes for the first time.
-            getCodesInCSVsForAllDatasets(quandl_apikey)"""
-
         # Fetch the Quandl codes from mongo collection to extract data,
         qcodes_cursor = qcodes_colln.find()
 
@@ -156,6 +140,7 @@ def main():
                                dataset_descrpn, dataset_code, data_mode,
                                prev_count, qcode_name)
     except:
+        raise
         pass
 
     logging.info("Total time taken to fetch data from Quandl : " +

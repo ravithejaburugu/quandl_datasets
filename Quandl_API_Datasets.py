@@ -39,7 +39,7 @@ def getCodesInCSVsForAllDatasets(quandl_apikey):
     total_codes = 0
     json_data = {}
 
-    while prev_codes_count != total_codes:
+    """while prev_codes_count != total_codes:
         prev_codes_count = total_codes
         try:
             page += 1
@@ -56,8 +56,12 @@ def getCodesInCSVsForAllDatasets(quandl_apikey):
     
             total_codes = len(database_codes) + len(premium_codes)
         except:
+            print "Errorrrrr..."
             continue
-    print database_codes
+    print database_codes"""
+
+    with open('q_database_codes.json') as q_database_codes:    
+        database_codes = json.load(q_database_codes)
 
     for code in database_codes.keys():
     
@@ -82,9 +86,11 @@ def getCodesInCSVsForAllDatasets(quandl_apikey):
                 saveCodesInMongo(database_codes[code])
                 
             except:
+                print "Errorrrrr..."
                 continue
             finally:
-                os.remove(zip_filename)
+                if os.path.isfile(zip_filename):
+                    os.remove(zip_filename)
 
     logging.info(str(len(database_codes))
                  + " datasets should be downloaded to Mongo")
@@ -107,34 +113,37 @@ def saveCodesInMongo(qcode_name):
             logging.info(fn + " extracted.")
             codesFile = os.path.abspath(os.path.join(DEFAULT_DATA_PATH, fn))
             dataset = fn.replace('-datasets-codes.csv', '')
-            with open(codesFile, 'r') as csv_file:
-                csvlines = csv_file.readlines()
 
-                for num, line in enumerate(csvlines):
-                    codeline = line.split(',')
-                    if len(codeline) > 1:
-                        dataset_code = codeline[0]
-                        dataset_descrpn = codeline[1]
-                        created_time = datetime.now().strftime("%Y-%m-%d")
-
-                        code_doc = {"dataset": dataset,
-                                    "dataset_code": dataset_code,
-                                    "description": dataset_descrpn,
-                                    "base_url": q_data_base_URL.format(dataset_code),
-                                    "created_time":	created_time,
-                                    "name": qcode_name,
-                                    "_id": dataset_code,
-                                    }
-                        dataset_qcodes.append(code_doc)
-                        
             qcode_cursor = qcodes_colln.find_one({'dataset': dataset})
-
+            if not qcode_cursor:
+                with open(codesFile, 'r') as csv_file:
+                    csvlines = csv_file.readlines()
+    
+                    for num, line in enumerate(csvlines):
+                        codeline = line.split(',')
+                        if len(codeline) > 1:
+                            dataset_code = codeline[0]
+                            dataset_descrpn = codeline[1]
+                            created_time = datetime.now().strftime("%Y-%m-%d")
+    
+                            code_doc = {"dataset": dataset,
+                                        "dataset_code": dataset_code,
+                                        "description": dataset_descrpn,
+                                        "base_url": q_data_base_URL.format(dataset_code),
+                                        "created_time":	created_time,
+                                        "name": qcode_name,
+                                        "_id": dataset_code,
+                                        }
+                            dataset_qcodes.append(code_doc)
+                        
             if qcode_cursor:
                 mongo.bulk_mongo_update(qcodes_colln, dataset_qcodes)
             else:
                 mongo.bulk_mongo_insert(qcodes_colln, dataset_qcodes)
 
         except:
+            raise
+            print "Errorrrrr..."
             continue
         finally:
             os.remove(codesFile)
